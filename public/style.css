@@ -140,7 +140,8 @@ html {
 }
 
 body {
-  background-color: rgb(36, 181, 124);
+  background-color: rgb(91, 99, 212);
+  color: white;
   font-family: "KBO-Dia-Gothic_bold", sans-serif;
   text-align: center;
   height: 90%;
@@ -189,6 +190,7 @@ article {
   height: 70%;
   border: 5px solid rgb(255, 255, 255);
   border-radius: 30px;
+  color: black;
 }
 #owunwan-article {
   margin: 5vh auto;

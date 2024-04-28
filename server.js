@@ -82,3 +82,15 @@ app.get("/OWunWan/detail/:id", async (req, res) => {
     res.status(400).send("존재하지 않는 URL 입니다.");
   }
 });
+
+app.get("/OWunWan_edit/:id", async (req, res) => {
+  let result = await db.collection("OWunWan").findOne({ _id: new ObjectId(req.params.id) });
+  res.render("OWunWan_edit.ejs", { result: result });
+});
+
+app.post("/OWunWan_edit_post/:id", async (req, res) => {
+  db.collection("OWunWan").updateOne(
+    { _id: new ObjectId(req.params.id) },
+    { $set: { title: req.body.title, content: req.body.content } }
+  );
+});
