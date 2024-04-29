@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
 const { ObjectId } = require("mongodb");
+const methodOverride = require("method-override");
 
+app.use(methodOverride("_method"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
@@ -54,7 +56,7 @@ app.get("/OWunWanWrite", async (req, res) => {
 });
 
 app.post("/OWunWan_post", async (req, res) => {
-  //오운완 게시물 DB저장
+  //오운완 게시물 등록하기
   try {
     if (req.body.title === "") {
       res.send("제목을 입력해주세요");
@@ -84,13 +86,21 @@ app.get("/OWunWan/detail/:id", async (req, res) => {
 });
 
 app.get("/OWunWan_edit/:id", async (req, res) => {
+  //수정할 게시글 불러오기
   let result = await db.collection("OWunWan").findOne({ _id: new ObjectId(req.params.id) });
   res.render("OWunWan_edit.ejs", { result: result });
 });
 
-app.post("/OWunWan_edit_post/:id", async (req, res) => {
-  db.collection("OWunWan").updateOne(
-    { _id: new ObjectId(req.params.id) },
-    { $set: { title: req.body.title, content: req.body.content } }
-  );
+app.put("/OWunWan_edit_post/:id", async (req, res) => {
+  // 수정완료 버튼 누르면
+  try {
+    await db
+      .collection("OWunWan")
+      .updateOne({ _id: new ObjectId(req.params.id) }, { $set: { title: req.body.title, content: req.body.content } });
+
+    res.send(`<script>location.href="/OWunWan";</script>`);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("DB오류");
+  }
 });
