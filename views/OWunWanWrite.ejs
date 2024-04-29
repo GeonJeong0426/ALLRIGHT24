@@ -24,8 +24,29 @@
         <input name="title" type="text" placeholder="제목을 적어주세요" class="font" required />
         <textarea name="content" class="font" placeholder="오늘은 어떤 운동을 했나요?" required></textarea>
         <br />
-        <button type="submit" class="font">오 운 완!</button>
+        <button type="button" class="font" id="owunwan_posting">오 운 완!</button>
       </form>
     </article>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      document.getElementById("owunwan_posting").addEventListener("click", () => {
+        Swal.fire({
+          title: "오운완을 등록하시겠습니까?",
+          // text: "오늘 하루도 수고 많으셨어요",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "등록하기",
+          cancelButtonText: "취소",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            //등록하기 누르면
+            document.getElementById("owunwan_form").submit();
+          }
+        });
+      });
+    </script>
   </body>
 </html>

@@ -63,7 +63,7 @@ app.post("/OWunWan_post", async (req, res) => {
     } else {
       //제목이 입력되었을때만 저장
       await db.collection("OWunWan").insertOne({ title: req.body.title, content: req.body.content });
-      res.redirect("/");
+      res.redirect("/OWunWan");
     }
   } catch (error) {
     res.send("DB error!");
@@ -98,9 +98,15 @@ app.put("/OWunWan_edit_post/:id", async (req, res) => {
       .collection("OWunWan")
       .updateOne({ _id: new ObjectId(req.params.id) }, { $set: { title: req.body.title, content: req.body.content } });
 
-    res.send(`<script>location.href="/OWunWan";</script>`);
+    res.redirect("/OWunWan");
   } catch (error) {
     console.log(error);
     res.status(400).send("DB오류");
   }
+});
+
+app.delete("/OWunWan_delete/:id", async (req, res) => {
+  //삭제하기
+  await db.collection("OWunWan").deleteOne({ _id: new ObjectId(req.params.id) });
+  res.redirect("/OWunWan");
 });

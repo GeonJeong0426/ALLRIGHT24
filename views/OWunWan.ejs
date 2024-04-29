@@ -24,16 +24,48 @@
         <% for( let i = 0; i < result.length; i++ ) { %>
 
         <div class="list">
-          <a href="/OWunWan/detail/<%= result[i]._id %>">
-            <h4><%= result[i].title %></h4>
-
-            <p><%= result[i].content %></p>
-          </a>
+          <div class="list_content">
+            <a href="/OWunWan/detail/<%= result[i]._id %>">
+              <h4><%= result[i].title %></h4>
+              <p><%= result[i].content %></p>
+            </a>
+          </div>
+          <div class="list_btn">
+            <a href="/OWunWan_edit/<%= result[i]._id %>"> ✏️ 수정하기</a><br />
+            <span class="delete_btn" data-id="<%= result[i]._id %>">🗑️ 삭제하기</ㄴ>
+          </div>
         </div>
-        <a href="/OWunWan_edit/<%= result[i]._id %>">수정하기</a>
 
         <% } %>
       </div>
+      <a href="/OWunWanWrite">💪오운완 등록하기😅</a>
     </article>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      document.querySelectorAll(".delete_btn").forEach(button => {
+        button.addEventListener("click", (e) => {
+        Swal.fire({
+          title: "게시글을 삭제하시겠습니까?",
+          // text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "삭제하기",
+          cancelButtonText: "취소",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            //삭제하기 누르면
+            fetch('/OWunWan_delete/'+e.target.dataset.id, {
+              method: 'DELETE'
+            })
+            location.reload();
+          }
+        });
+      });
+      });
+      
+    </script>
   </body>
 </html>
