@@ -20,29 +20,36 @@
     </nav>
 
     <article id="owunwan-article">
+      》 》 》&nbsp;&nbsp;&nbsp;&nbsp;<button id="owunwan_write_btn" class="font">💪 오운완 등록하기 😅</button
+      >&nbsp;&nbsp;&nbsp;&nbsp;《 《 《
+
       <div class="list-box">
         <% for( let i = 0; i < result.length; i++ ) { %>
 
         <div class="list">
           <div class="list_content">
             <a href="/OWunWan/detail/<%= result[i]._id %>">
-              <h4><%= result[i].title %></h4>
-              <p><%= result[i].content %></p>
+              <p style="font-size: 1.1vw">📌 <%= result[i].title %></p>
+              <br />
+              <p style="font-size: 0.9vw"><%= result[i].content %></p>
             </a>
           </div>
           <div class="list_btn">
-            <a href="/OWunWan_edit/<%= result[i]._id %>"> ✏️ 수정하기</a><br />
-            <span class="delete_btn" data-id="<%= result[i]._id %>">🗑️ 삭제하기</span>
+            <a id="edit_btn" href="/OWunWan_edit/<%= result[i]._id %>"> ✏️ 수정하기</a>&nbsp;&nbsp;
+            <span id="del_btn" class="delete_btn" data-id="<%= result[i]._id %>">🗑️ 삭제하기</span>
           </div>
         </div>
 
         <% } %>
       </div>
-      <a href="/OWunWanWrite">💪오운완 등록하기😅</a>
     </article>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+      document.getElementById("owunwan_write_btn").addEventListener("click", () => {
+        window.location.href = "/OWunWanWrite";
+      });
+
       document.querySelectorAll(".delete_btn").forEach((button) => {
         button.addEventListener("click", (e) => {
           Swal.fire({
