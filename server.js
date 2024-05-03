@@ -110,3 +110,9 @@ app.delete("/OWunWan_delete/:id", async (req, res) => {
   await db.collection("OWunWan").deleteOne({ _id: new ObjectId(req.params.id) });
   res.redirect("/OWunWan");
 });
+
+app.get("/PostureQnA", async (req, res) => {
+  //게시글목록
+  let result = await db.collection("PostureQnA").find().toArray();
+  res.render("PostureQnA.ejs", { result: result });
+});
