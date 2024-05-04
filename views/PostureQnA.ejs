@@ -18,14 +18,14 @@
 
         <div class="list">
           <div class="list_content">
-            <a href="/OWunWan/detail/<%= result[i]._id %>">
+            <a href="/PostureQnA/detail/<%= result[i]._id %>">
               <p style="font-size: 1.1vw">📌 <%= result[i].title %></p>
               <br />
               <p style="font-size: 0.9vw"><%= result[i].content %></p>
             </a>
           </div>
           <div class="list_btn">
-            <a id="edit_btn" href="/OWunWan_edit/<%= result[i]._id %>"> ✏️ 수정하기</a>&nbsp;&nbsp;
+            <a id="edit_btn" href="/PostureQnA_edit/<%= result[i]._id %>"> ✏️ 수정하기</a>&nbsp;&nbsp;
             <span id="del_btn" class="delete_btn" data-id="<%= result[i]._id %>">🗑️ 삭제하기</span>
           </div>
         </div>
@@ -37,7 +37,7 @@
 
     <script>
       document.getElementById("owunwan_write_btn").addEventListener("click", () => {
-        window.location.href = "/OWunWanWrite";
+        window.location.href = "/PostureQnAWrite";
       });
 
       document.querySelectorAll(".delete_btn").forEach((button) => {
@@ -54,7 +54,7 @@
           }).then((result) => {
             if (result.isConfirmed) {
               //삭제하기 누르면
-              fetch("/OWunWan_delete/" + e.target.dataset.id, {
+              fetch("/PostureQnA_delete/" + e.target.dataset.id, {
                 method: "DELETE",
               });
               location.reload();
