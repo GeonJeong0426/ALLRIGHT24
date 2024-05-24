@@ -34,14 +34,17 @@ new MongoClient(url)
     console.log(err);
   });
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.get("/quiz", async (req, res) => {
+app.get("/Quiz", (req, res) => {
   res.sendFile(__dirname + "/public/quiz.html");
 });
 
+app.get("/Stretch", (req, res) => {
+  res.sendFile(__dirname + "/public/stretch/stretch.html");
+});
 // 오운완 서버 코드
 
 app.get("/OWunWan", async (req, res) => {
@@ -179,3 +182,5 @@ app.delete("/PostureQnA_delete/:id", async (req, res) => {
   await db.collection("PostureQnA").deleteOne({ _id: new ObjectId(req.params.id) });
   res.redirect("/PostureQnA");
 });
+
+app.get("/Stretch");

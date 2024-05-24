@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALLRIGHT24</title>
+    <link rel="stylesheet" href="stretch_style.css" />
+    <script src="stretchDscr.js" defer type="text/javascript"></script>
+  </head>
+  <body>
+    <header class="home"><a href="/">ALLRIGHT24</a></header>
+    <nav>
+      <ul>
+        <li><a href="/Stretch">스트레칭</a></li>
+        <li><a href="#">나에게 맞는 운동은?</a></li>
+        <li><a href="/PostureQnA">자세 궁금해요!</a></li>
+        <li><a href="/OWunWan">오운완</a></li>
+        <li><a href="#"></a>식단 계산기</li>
+        <li><a href="/Quiz">나의 운동 지식은?</a></li>
+      </ul>
+    </nav>
+
+    <article id="article">
+      <ul class="stretch">
+        <li>
+          <a href="#" class="stretch_part" data-target="upper-body">상체</a>
+          <ul class="detail">
+            <li><a href="#" class="stretch_detail" data-target="neck">목</a></li>
+            <li><a href="#" class="stretch_detail" data-target="shoulder">어깨</a></li>
+            <li><a href="#" class="stretch_detail" data-target="chest">가슴</a></li>
+            <li><a href="#" class="stretch_detail" data-target="waist">허리</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="stretch_part" data-target="lower-body">하체</a>
+          <ul class="detail">
+            <li><a href="#" class="stretch_detail" data-target="thigh">허벅지</a></li>
+            <li><a href="#" class="stretch_detail" data-target="hip">엉덩이</a></li>
+            <li><a href="#" class="stretch_detail" data-target="calf">종아리</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="showbox">
+        <div class="stretch_img">
+          <button class="arrow" id="prev"><img src="img/화살표1.png" alt="&lt;" /></button>
+          <p id="s_img"><img src="" alt="" /></p>
+          <button class="arrow" id="next"><img src="img/화살표2.png" alt="&gt;" /></button>
+        </div>
+        <p class="text"></p>
+      </div>
+    </article>
+  </body>
+</html>
