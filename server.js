@@ -39,18 +39,35 @@ app.get("/", (req, res) => {
 });
 
 app.get("/Quiz", (req, res) => {
-  res.sendFile(__dirname + "/public/quiz.html");
+  res.sendFile(__dirname + "/public/quiz/quiz.html");
 });
 
 app.get("/Stretch", (req, res) => {
   res.sendFile(__dirname + "/public/stretch/stretch.html");
 });
+
+app.get("/CalorieCalculator", (req, res) => {
+  res.sendFile(__dirname + "/public/calorieCalculator/calorieCalculator.html");
+});
 // 오운완 서버 코드
 
-app.get("/OWunWan", async (req, res) => {
+app.get("/OWunWan/:page", async (req, res) => {
   //게시글목록
-  let result = await db.collection("OWunWan").find().toArray();
-  res.render("OWunWan.ejs", { result: result });
+  let pageCount = await db.collection("OWunWan").find().toArray();
+  let totalPage = Math.ceil(pageCount.length / 8);
+  let result = await db
+    .collection("OWunWan")
+    .find()
+    .skip((req.params.page - 1) * 8)
+    .limit(8)
+    .toArray();
+  console.log(totalPage);
+  res.render("OWunWan.ejs", { result: result, totalPage: totalPage });
+});
+
+app.get("/OWunWan", (req, res) => {
+  // /OWunWan 경로로 요청이 들어오면 /OWunWan/1로 리다이렉트
+  res.redirect("/OWunWan/1");
 });
 
 app.get("/OWunWanWrite", async (req, res) => {

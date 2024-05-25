@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALLRIGHT24</title>
+    <link rel="stylesheet" href="calorieCalculator.css" />
+    <script src="stretchDscr.js" defer type="text/javascript"></script>
+  </head>
+  <body>
+    <header class="home"><a href="/">ALLRIGHT24</a></header>
+    <nav>
+      <ul>
+        <li><a href="/Stretch">스트레칭</a></li>
+        <li><a href="#">나에게 맞는 운동은?</a></li>
+        <li><a href="/PostureQnA">자세 궁금해요!</a></li>
+        <li><a href="/OWunWan">오운완</a></li>
+        <li><a href="/CalorieCalculator"></a>식단 계산기</li>
+        <li><a href="/Quiz">나의 운동 지식은?</a></li>
+      </ul>
+    </nav>
+
+    <article id="article">
+      <h1>칼로리 계산기</h1>
+      <form id="calculator">
+        <label for="sex">성별:</label>
+        <select id="sex" name="성별">
+          <option value="남성">남성</option>
+          <option value="여성">여성</option>
+        </select>
+        <br />
+
+        <label for="age">나이:</label>
+        <input type="number" id="age" name="age" required />
+        <br />
+
+        <label for="height">신장 (cm):</label>
+        <input type="number" id="height" name="height" required />
+        <br />
+
+        <label for="weight">체중 (kg):</label>
+        <input type="number" id="weight" name="weight" required />
+        <br />
+
+        <label for="workout">운동 내역:</label>
+        <textarea id="workout" name="workout" rows="4" cols="50" required></textarea>
+        <br />
+
+        <button type="submit">계산하기</button>
+      </form>
+
+      <h2>계산 결과</h2>
+      <p id="response"></p>
+    </article>
+    <script>
+      document.getElementById("calculator").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const sex = document.getElementById("sex").value;
+        const age = document.getElementById("age").value;
+        const height = document.getElementById("height").value;
+        const weight = document.getElementById("weight").value;
+        const workout = document.getElementById("workout").value;
+
+        const response = await fetch("http://34.168.182.24:5000/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ sex, age, height, weight, workout }),
+        });
+
+        const data = await response.json();
+        document.getElementById("response").textContent = data.response || data.error;
+      });
+    </script>
+  </body>
+</html>
