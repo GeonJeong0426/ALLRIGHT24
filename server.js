@@ -2,7 +2,20 @@ const express = require("express");
 const app = express();
 const { ObjectId } = require("mongodb");
 const methodOverride = require("method-override");
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const bcrypt = require("bcrypt");
 
+app.use(passport.initialize());
+app.use(
+  session({
+    secret: "b90e94f9294f1665463f477c2ef7f0de73688f10f7013c06468448ec67c82aa5",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.session());
 app.use(methodOverride("_method"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,12 +62,16 @@ app.get("/Stretch", (req, res) => {
 app.get("/CalorieCalculator", (req, res) => {
   res.sendFile(__dirname + "/public/calorieCalculator/calorieCalculator.html");
 });
+
+app.get("/Recommend", (req, res) => {
+  res.sendFile(__dirname + "/public/recommend/recommend.html");
+});
 // 오운완 서버 코드
 
 app.get("/OWunWan/:page", async (req, res) => {
   //게시글목록
-  let pageCount = await db.collection("OWunWan").find().toArray();
-  let totalPage = Math.ceil(pageCount.length / 8);
+  let pageCount = await db.collection("OWunWan").countDocuments();
+  let totalPage = Math.ceil(pageCount / 8);
   let result = await db
     .collection("OWunWan")
     .find()
@@ -200,4 +217,80 @@ app.delete("/PostureQnA_delete/:id", async (req, res) => {
   res.redirect("/PostureQnA");
 });
 
-app.get("/Stretch");
+passport.use(
+  new LocalStrategy(async (ID, PW, cb) => {
+    let result = await db.collection("user").findOne({ username: ID });
+    if (!result) {
+      return cb(null, false, { message: "존재하지 않는 ID입니다." });
+    }
+    if (await bcrypt.compare(PW, result.password)) {
+      return cb(null, result);
+    } else {
+      return cb(null, false, { message: "비밀번호가 일치하지 않습니다." });
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  process.nextTick(() => {
+    done(null, { id: user._id, username: user.username });
+  });
+});
+
+passport.deserializeUser(async (user, done) => {
+  let result = await db.collection("user").findOne({ _id: new ObjectId(user.id) });
+  delete result.password;
+  process.nextTick(() => {
+    return done(null, result);
+  });
+});
+
+app.get("/login", async (req, res) => {
+  res.render("login.ejs");
+});
+
+app.post("/login", async (req, res, next) => {
+  passport.authenticate("local", (error, user, info) => {
+    //로그인에 대한 응답 파라미터
+    if (error) return res.status(500).json(error);
+    if (!user) return res.status(401).json(info.message);
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      res.redirect("/");
+    });
+  })(req, res, next);
+});
+
+app.get("/join", async (req, res) => {
+  res.render("join.ejs");
+});
+
+app.post("/join", async (req, res) => {
+  let ID = req.body.username;
+  let PW1 = req.body.password;
+  let PW2 = req.body.password2;
+
+  function isId(asValue) {
+    var regExp = /^[a-z0-9]{4,20}$/;
+    return regExp.test(asValue);
+  }
+  function isPw(asValue) {
+    let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[^\s]{6,20}$/;
+    return regExp.test(asValue);
+  }
+  let checkId = isId(ID);
+  let checkPw = isPw(PW1);
+
+  if (checkId && checkPw && PW1 === PW2) {
+    let hash = await bcrypt.hash(req.body.password, 12);
+    await db.collection("user").insertOne({
+      username: req.body.username,
+      password: hash,
+    });
+    res.send('<script>alert("회원가입이 완료되었습니다."); location.href="/";</script>');
+  } else if (PW1 !== PW2) {
+    res.send('<script>alert("비밀번호가 일치하지 않습니다."); location.href="/join";</script>');
+  } else if (checkId || checkPw) {
+    res.send('<script>alert("아이디/비밀번호 조건을 확인하세요."); location.href="/join";</script>');
+  }
+});

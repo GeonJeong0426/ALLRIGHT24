@@ -123,6 +123,10 @@ table {
 }
 /* RESET CSS */
 
+/* #alert{
+    display: none;
+} */
+
 @font-face {
   font-family: "KBO-Dia-Gothic_bold";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/KBO-Dia-Gothic_bold.woff") format("woff");
@@ -140,7 +144,6 @@ body {
   font-family: "KBO-Dia-Gothic_bold", sans-serif;
   text-align: center;
   height: 90%;
-  /* margin-bottom: 60px; footer의 높이만큼 여백을 추가합니다. */
 }
 
 a {
@@ -349,43 +352,4 @@ article {
 #edit_btn:hover {
   border-radius: 10px;
   background-color: rgb(130, 190, 229);
-}
-
-#footer {
-  position: fixed;
-  bottom: 0;
-  width: 90%;
-  padding: 10px 0; /* 상하 여백 */
-  text-align: center; /* 중앙 정렬 */
-}
-
-.pagination {
-  background-color: white;
-  border-radius: 5px;
-  font-size: 1vw;
-}
-
-.user-controls {
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 2vw;
-  font-size: 1.2vw;
-}
-
-.user-controls a {
-  margin-left: 10px;
-}
-
-.user-controls a:hover {
-  color: orange;
-}
-
-#login_form {
-  margin-top: 10vh;
-  border-radius: 10px;
-}
-
-.login_input {
-  margin: 1vh;
 }

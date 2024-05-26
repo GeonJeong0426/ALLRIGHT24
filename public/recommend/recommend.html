@@ -1,0 +1,302 @@
+<!-- /////   여기서부터 나에게 맞는 운동은? 
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALLRIGHT24</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <header class="home"><a href="/">ALLRIGHT24</a></header>
+    <nav>
+      <ul>
+        <li class="home"><a href="#">나에게 맞는 운동은?</a></li>
+        <li><a href="#">자세 궁금해요!</a></li>
+        <li><a href="#">오운완</a></li>
+        <li><a href="#">식단 계산기</a></li>
+        <li><a href="#">나의 운동 지식은?</a></li>
+      </ul>
+    </nav>
+
+    <article id="article1">
+      <div id="ex_h1">
+        <br><h1>나에게 맞는 운동은?</h2><br><br>
+      </div>
+        <form id="exerciseForm">
+          <label for="height">키(cm):<br></label>
+          <input class="ex_input" type="number" id="height" name="height" required><br>
+          <label for="weight">몸무게(kg):<br></label>
+          <input class="ex_input" type="number" id="weight" name="weight" required><br>
+          <button type="submit" id="ex_button1">운동 추천 받기</button>
+        </form>
+        <div id="exerciseRecommendation"></div>
+    </article>
+      
+    <script>
+      document.getElementById("exerciseForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var height = parseFloat(document.getElementById("height").value);
+        var weight = parseFloat(document.getElementById("weight").value);
+    
+        if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+          Swal.fire({
+            icon: 'error',
+            title: '오류',
+            text: '키와 몸무게를 올바르게 입력하세요.'
+          });
+          return;
+        }
+      
+        var bmi = weight / ((height / 100) ** 2);
+        var recommendation = document.getElementById("exerciseRecommendation");
+        var message;
+        var exerciseMethod;
+        if (bmi < 18.5) {
+          message = "BMI가 낮으므로 근력 운동을 통한 근육 강화를 권장합니다.";
+          exerciseMethod = "전신 근력 운동: 굴림, 스쿼트, 데드리프트, 벤치 프레스, 랫 풀다운, 숄더 프레스 등"; 
+        } else if (bmi >= 18.5 && bmi < 25) {
+          message = "정상 체중이므로 유산소와 근력의 병행하는 전신 운동을 권장합니다.";
+          exerciseMethod = "유산소 운동: 조깅, 러닝머신, 자전거 타기, 수영, 줄넘기 등\n근력 운동: 굴림, 스쿼트, 데드리프트, 벤치 프레스, 랫 풀다운, 숄더 프레스 등."; 
+        } else {
+          message = "BMI가 높으므로 유산소 운동을 통한 체지방 감량을 권장합니다.";
+          exerciseMethod = "유산소 운동: 조깅, 러닝머신, 자전거 타기, 수영, 줄넘기 등"; 
+        }
+        
+        // 운동 방법을 알려주는 SweetAlert
+        Swal.fire({
+          icon: 'info',
+          title: '운동 추천',
+          text: message,
+          showCancelButton: true,
+          confirmButtonText: '운동 방법 알아보기',
+          cancelButtonText: '닫기',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'info',
+              title: '운동 방법',
+              text: exerciseMethod,
+              confirmButtonText: '확인'
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html> -->
+
+//
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>운동 선택</title>
+    <link rel="stylesheet" href="recommend.css" />
+  </head>
+  <body>
+    <header class="home"><a href="/">ALLRIGHT24</a></header>
+    <nav>
+      <ul>
+        <li><a href="/Stretch">스트레칭</a></li>
+        <li><a href="/Recommend">나에게 맞는 운동은?</a></li>
+        <li><a href="/PostureQnA">자세 궁금해요!</a></li>
+        <li><a href="/OWunWan">오운완</a></li>
+        <li><a href="/CalorieCalculator"></a>식단 계산기</li>
+        <li><a href="/Quiz">나의 운동 지식은?</a></li>
+      </ul>
+    </nav>
+    <article id="article2">
+      <div id="ex_h2">
+        <br />
+      </div>
+      <form id="exerciseForm">
+        <label for="exercisePart">운동 부위 선택:</label>
+        <select id="exercisePart" name="exercisePart" required>
+          <option value="">부위 선택</option>
+          <option value="back">등</option>
+          <option value="chest">가슴</option>
+          <option value="legs">하체</option>
+          <option value="shoulders">어깨</option>
+          <option value="arms">팔</option>
+        </select>
+        <br />
+        <div id="exerciseOptions"></div>
+        <br />
+        <button type="submit" id="ex_button2">운동 방법 알아보기!!</button>
+      </form>
+    </article>
+    <script>
+      // 운동 옵션 설정
+      const exerciseOptions = {
+        back: [
+          {
+            name: "풀업 (Pull-up)",
+            description:
+              "등과 상완삼두근을 강화하는 운동입니다. 풀업은 막대에 몸을 끌어올리는 운동으로 등과 팔 근육을 강화합니다.",
+            videoLink: "https://www.youtube.com/embed/nWhS28U6bCY?si=s_7HfBWlTtICUMk-",
+          },
+          {
+            name: "랫 풀다운 (Lat Pulldown)",
+            description:
+              "등의 윗부분을 강화하는 운동입니다. 랫 풀다운은 기계를 이용하여 몸을 끌어내리는 운동으로 등의 근육 발달에 좋습니다.",
+            videoLink: "https://www.youtube.com/embed/-5225-VSJNE?si=j-Igd8tD9JPuVqhK",
+          },
+          {
+            name: "바벨 로우 (Barbell Row)",
+            description: "등의 근육 균형을 잡는 운동입니다. 상체를 앞으로 숙이고 바벨을 사용해 등을 당기는 운동입니다.",
+            videoLink: "https://www.youtube.com/embed/EEqGCoTuYfQ?si=MuRAuVI6NXU0YnZe",
+          },
+        ],
+        chest: [
+          {
+            name: "벤치 프레스 (Bench Press)",
+            description: "가슴의 큰 근육을 발달시키는 운동입니다. 바벨을 가슴에 내리면서 밀어올리는 운동입니다.",
+            videoLink: "https://www.youtube.com/embed/0DsXTSHo3lU?si=Fdw_zYb9yHLwbM_v",
+          },
+          {
+            name: "덤벨 플라이 (Dumbbell Fly)",
+            description: "가슴을 균형 있게 발달시키는 운동입니다. 덤벨을 가슴 위에서 열고 닫는 운동을 반복합니다.",
+            videoLink: "https://www.youtube.com/embed/yVW8fgjlags?si=roDP-jb9RPX_SvNu",
+          },
+          {
+            name: "푸쉬업 (Push-up)",
+            description: "가슴뿐만 아니라 코어와 삼두근을 강화하는 운동입니다. 바닥에 누워 몸을 들어올리는 운동입니다.",
+            videoLink: "https://www.youtube.com/embed/-_DUjHxgmWk?si=Hd32WHiRzn5xILSc",
+          },
+        ],
+        legs: [
+          {
+            name: "스쿼트 (Squat)",
+            description: "하체를 키우는 데 효과적인 운동입니다. 발 끝을 앞으로 향하게 하고 깊게 앉아 일어납니다.",
+            videoLink: "https://www.youtube.com/embed/Fk9j6pQ6ej8?si=63vJQE2pULMBhNTH",
+          },
+          {
+            name: "레그 프레스 (Leg Press)",
+            description:
+              "대퇴사두근과 대둔근을 발달시키는 운동입니다. 기계를 이용하여 발을 앞으로 밀면서 다리 근육을 발달시킵니다.",
+            videoLink: "https://www.youtube.com/embed/Ry_qhN5vx6I?si=48lpnMz7qQir58Qp",
+          },
+          {
+            name: "런지 (Lunge)",
+            description:
+              "대퇴사두근과 종아리, 엉덩이를 강화하는 운동입니다. 한 다리 앞으로 나아가면서 깊게 앉아 일어납니다.",
+            videoLink: "https://www.youtube.com/embed/gltEwrNd5Z8?si=0eBLY2TP1Esyb4Wn",
+          },
+        ],
+        shoulders: [
+          {
+            name: "숄더 프레스 (Shoulder Press)",
+            description: "어깨와 삼두근을 강화하는 운동입니다. 바벨이나 덤벨을 이용해 어깨 위로 밀어올리는 운동입니다.",
+            videoLink: "https://www.youtube.com/embed/Ia9DYFMkMmU?si=vID3Mp9zWBVgJm0v",
+          },
+          {
+            name: "레터럴 레이즈 (Lateral Raise)",
+            description:
+              "측면 어깨 근육을 발달시키는 운동입니다. 덤벨을 옆으로 들어 옆구리에서 어깨 높이까지 올립니다.",
+            videoLink: "https://www.youtube.com/embed/D1tb6rYgpDA?si=9eNrCvWlensKFDwV",
+          },
+          {
+            name: "밀리터리 프레스 (Military Press)",
+            description: "어깨와 삼두근을 균형 있게 발달시키는 운동입니다. 바벨을 어깨 위로 밀어올리는 운동입니다.",
+            videoLink: "https://www.youtube.com/embed/Nz-GgD0yRYQ?si=5mCCZF0KX7hKDp9o",
+          },
+        ],
+        arms: [
+          {
+            name: "바이셉스 컬 (Bicep Curl)",
+            description: "이두근을 강화하는 운동입니다. 덤벨이나 바벨을 이용하여 팔을 구부리는 운동입니다.",
+            videoLink: "https://www.youtube.com/embed/Dlg0W_5mq98?si=W5XGB9AWcH9fo5Iu",
+          },
+          {
+            name: "트라이셉 익스텐션 (Tricep Extension)",
+            description:
+              "삼두근을 강화하고 근육을 형성하는 운동입니다. 트라이셉 익스텐션은 팔을 펼치고 접는 운동을 반복하여 트라이셉스 근육을 발달시킵니다.",
+            videoLink: "https://www.youtube.com/embed/ogyGQxuxxn4?si=HgZ42TZEksapsuGd",
+          },
+          {
+            name: "해머 컬 (Hammer Curl)",
+            description:
+              "이두와 전완을 더욱 강화하는 운동입니다. 덤벨을 수직으로 들어올리는 운동으로 상완 이완에 좋습니다.",
+            videoLink: "https://www.youtube.com/embed/h0rmSFi_qZA?si=f4d_iYaBOUhGa9ta",
+          },
+        ],
+      };
+
+      const exercisePartSelect = document.getElementById("exercisePart");
+      const exerciseOptionsDiv = document.getElementById("exerciseOptions");
+      const exerciseButton = document.getElementById("ex_button2");
+
+      exercisePartSelect.addEventListener("change", function () {
+        const selectedPart = this.value;
+        const options = exerciseOptions[selectedPart];
+
+        // 선택된 운동 옵션을 화면에 표시
+        let optionsHTML = "";
+        if (options) {
+          optionsHTML += '<label for="exercise">운동 선택: </label>';
+          optionsHTML += '<select id="exercise" name="exercise" required>';
+          optionsHTML += '<option value="">운동 선택</option>';
+          options.forEach((option) => {
+            optionsHTML += `<option value="${option.name}">${option.name}</option>`;
+          });
+          optionsHTML += "</select>";
+        }
+        exerciseOptionsDiv.innerHTML = optionsHTML;
+      });
+
+      // 운동 추천 버튼 클릭 시 처리
+      const exerciseForm = document.getElementById("exerciseForm");
+      exerciseForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const selectedExercise = document.getElementById("exercise").value;
+
+        if (selectedExercise) {
+          // 선택한 운동에 대한 설명을 표시 (여기서는 alert 대신 동적으로 표시)
+          const exerciseDescription = exerciseOptions[exercisePartSelect.value].find(
+            (exercise) => exercise.name === selectedExercise
+          ).description;
+          showExerciseDescription(selectedExercise, exerciseDescription);
+          exerciseButton.style.display = "none"; // 버튼 숨기기
+          exercisePartSelect.style.display = "none"; // 선택 숨기기
+          document.querySelector('label[for="exercisePart"]').style.display = "none";
+          document.getElementById("exercise").style.display = "none"; // 운동 선택 숨기기
+        } else {
+          alert("운동을 선택하세요");
+        }
+      });
+
+      // 운동 설명을 동적으로 표시하는 함수 (운동 설명과 함께 비디오도 표시)
+      function showExerciseDescription(exerciseName, description) {
+        const selectedPart = exercisePartSelect.value;
+        const selectedExercise = exerciseOptions[selectedPart].find((exercise) => exercise.name === exerciseName);
+
+        const descriptionHTML = `
+        <h3>${exerciseName}</h3>
+        <p>${description}</p><br>
+        <div>
+          <iframe width="560" height="315" src="${selectedExercise.videoLink}" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <br>
+        <button type="button" id="backButton">돌아가기</button>
+      `;
+        exerciseOptionsDiv.innerHTML = descriptionHTML;
+
+        // 돌아가기 버튼 클릭 시 운동 선택 화면으로 돌아가기
+        const backButton = document.getElementById("backButton");
+        backButton.addEventListener("click", function () {
+          exerciseOptionsDiv.innerHTML = "";
+          exercisePartSelect.value = "";
+          document.getElementById("exerciseForm").reset();
+          exerciseButton.style.display = "inline"; // 버튼 다시 보이기
+          exercisePartSelect.style.display = "inline"; // 선택 다시 보이기
+          document.querySelector('label[for="exercisePart"]').style.display = "inline";
+        });
+      }
+    </script>
+  </body>
+</html>
