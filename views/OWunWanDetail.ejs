@@ -13,6 +13,10 @@
       <div class="list-box">
         <div class="list">
           <h4><%= result.title %></h4>
+          <% for( let i = 0; i < imgData.length; i++ ) { %>
+          <p><img width="20%" href="<%= imgData[i].location %>" /></p>
+          <% } %>
+
           <p><%= result.content %></p>
         </div>
       </div>

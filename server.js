@@ -6,6 +6,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const bcrypt = require("bcrypt");
+const { S3Client } = require("@aws-sdk/client-s3");
 
 app.use(passport.initialize());
 app.use(
@@ -32,6 +33,24 @@ require("dotenv").config();
 
 let db;
 const url = process.env.mongoDB_URL;
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+const s3 = new S3Client({
+  region: "ap-northeast-2",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+  },
+});
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "storageofswe",
+    key: function (요청, file, cb) {
+      cb(null, Date.now().toString()); //업로드시 파일명 변경가능
+    },
+  }),
+});
 
 new MongoClient(url)
   .connect()
@@ -78,7 +97,6 @@ app.get("/OWunWan/:page", async (req, res) => {
     .skip((req.params.page - 1) * 8)
     .limit(8)
     .toArray();
-  console.log(totalPage);
   res.render("OWunWan.ejs", { result: result, totalPage: totalPage });
 });
 
@@ -92,14 +110,15 @@ app.get("/OWunWanWrite", async (req, res) => {
   res.render("OWunWanWrite.ejs");
 });
 
-app.post("/OWunWan_post", async (req, res) => {
-  //오운완 게시물 등록하기
+app.post("/OWunWan_post", upload.array("img", 4), async (req, res) => {
   try {
     if (req.body.title === "") {
       res.send("제목을 입력해주세요");
     } else {
       //제목이 입력되었을때만 저장
-      await db.collection("OWunWan").insertOne({ title: req.body.title, content: req.body.content });
+      await db
+        .collection("OWunWan")
+        .insertOne({ title: req.body.title, content: req.body.content, imgData: req.files });
       res.redirect("/OWunWan");
     }
   } catch (error) {
