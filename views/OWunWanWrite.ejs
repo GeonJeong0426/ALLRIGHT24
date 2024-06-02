@@ -12,8 +12,12 @@
     <article id="article">
       <form id="owunwan_form" action="OWunWan_post" method="post" enctype="multipart/form-data">
         <input name="title" type="text" placeholder="제목을 적어주세요" class="font" required />
-        <input type="file" name="img" accept="image/*" multiple />
+        <br />
+        <input type="file" name="img" accept="image/*" multiple id="fileInput" />
+
         <textarea name="content" class="font" placeholder="오늘은 어떤 운동을 했나요?" required></textarea>
+        <br />
+        사진 최대 4장 첨부 가능
         <br />
         <button type="button" class="font" id="owunwan_posting">오 운 완!</button>
       </form>

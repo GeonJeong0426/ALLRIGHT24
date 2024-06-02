@@ -390,3 +390,26 @@ article {
 .login_input {
   margin: 1vh;
 }
+
+#owunwan-detail-article {
+  margin: 5vh auto;
+  width: 85%;
+  height: 75%;
+  border: 5px solid rgb(255, 255, 255);
+  border-radius: 30px;
+  background-color: white;
+  text-align: left;
+  padding: 2vw;
+}
+
+#login_btn {
+  width: 5vw;
+  height: 4vh;
+  border-radius: 8px;
+}
+
+#join_btn {
+  width: 5vw;
+  height: 4vh;
+  border-radius: 8px;
+}

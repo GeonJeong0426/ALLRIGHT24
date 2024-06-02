@@ -7,7 +7,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const bcrypt = require("bcrypt");
 const { S3Client } = require("@aws-sdk/client-s3");
-
+require("dotenv").config();
 app.use(passport.initialize());
 app.use(
   session({
@@ -24,17 +24,13 @@ app.use(express.static(__dirname + "/public"));
 
 app.set("view engine", "ejs");
 
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/index.html");
-});
-
 const { MongoClient } = require("mongodb");
-require("dotenv").config();
 
 let db;
 const url = process.env.mongoDB_URL;
 const multer = require("multer");
 const multerS3 = require("multer-s3");
+const e = require("express");
 const s3 = new S3Client({
   region: "ap-northeast-2",
   credentials: {
@@ -66,8 +62,17 @@ new MongoClient(url)
     console.log(err);
   });
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+app.get("/", async (req, res) => {
+  let result1 = await db.collection("OWunWan").find().sort({ date: -1 }).limit(5).toArray();
+  let result2 = await db.collection("PostureQnA").find().sort({ date: -1 }).limit(5).toArray();
+  let userId = false;
+  let result = false;
+  if (req.user) {
+    userId = req.user._id;
+    result = await db.collection("user").findOne({ _id: new ObjectId(userId) });
+  }
+  console.log(result);
+  res.render("index.ejs", { result1: result1, result2, result2, userId: userId, result, result });
 });
 
 app.get("/Quiz", (req, res) => {
@@ -87,17 +92,19 @@ app.get("/Recommend", (req, res) => {
 });
 // 오운완 서버 코드
 
-app.get("/OWunWan/:page", async (req, res) => {
+app.get("/OWunWan/:page", ensureAuthenticated, async (req, res) => {
   //게시글목록
   let pageCount = await db.collection("OWunWan").countDocuments();
   let totalPage = Math.ceil(pageCount / 8);
   let result = await db
     .collection("OWunWan")
     .find()
+    .sort({ date: -1 })
     .skip((req.params.page - 1) * 8)
     .limit(8)
     .toArray();
-  res.render("OWunWan.ejs", { result: result, totalPage: totalPage });
+
+  res.render("OWunWan.ejs", { result: result, totalPage: totalPage, userId: req.user._id });
 });
 
 app.get("/OWunWan", (req, res) => {
@@ -105,29 +112,43 @@ app.get("/OWunWan", (req, res) => {
   res.redirect("/OWunWan/1");
 });
 
-app.get("/OWunWanWrite", async (req, res) => {
+app.get("/OWunWanWrite", ensureAuthenticated, async (req, res) => {
   //오운완 게시물 작성
   res.render("OWunWanWrite.ejs");
 });
 
-app.post("/OWunWan_post", upload.array("img", 4), async (req, res) => {
-  try {
-    if (req.body.title === "") {
-      res.send("제목을 입력해주세요");
-    } else {
-      //제목이 입력되었을때만 저장
-      await db
-        .collection("OWunWan")
-        .insertOne({ title: req.body.title, content: req.body.content, imgData: req.files });
-      res.redirect("/OWunWan");
+app.post("/OWunWan_post", ensureAuthenticated, async (req, res) => {
+  upload.array("img", 4)(req, res, async (err) => {
+    if (err) return res.send("이미지 업로드 중 에러가 발생했습니다.");
+
+    try {
+      let imgUrl = [];
+      for (let i = 0; i < req.files.length; i++) {
+        imgUrl.push(req.files[i].location);
+      }
+      if (req.body.title === "") {
+        res.send("제목을 입력해주세요");
+      } else {
+        //제목이 입력되었을때만 저장
+        await db.collection("OWunWan").insertOne({
+          title: req.body.title,
+          content: req.body.content,
+          user: req.user._id,
+          username: req.user.username,
+          imgUrl: imgUrl,
+          date: new Date(),
+        });
+        res.redirect("/OWunWan");
+      }
+    } catch (error) {
+      res.send("DB error!");
     }
-  } catch (error) {
-    res.send("DB error!");
-  }
+  });
 });
 
-app.get("/OWunWan/detail/:id", async (req, res) => {
+app.get("/OWunWan/detail/:id", ensureAuthenticated, async (req, res) => {
   // 오운완 상세페이지
+
   try {
     let result = await db.collection("OWunWan").findOne({ _id: new ObjectId(req.params.id) });
     if (result == null) {
@@ -141,13 +162,13 @@ app.get("/OWunWan/detail/:id", async (req, res) => {
   }
 });
 
-app.get("/OWunWan_edit/:id", async (req, res) => {
+app.get("/OWunWan_edit/:id", ensureAuthenticated, async (req, res) => {
   //수정할 게시글 불러오기
   let result = await db.collection("OWunWan").findOne({ _id: new ObjectId(req.params.id) });
   res.render("OWunWan_edit.ejs", { result: result });
 });
 
-app.put("/OWunWan_edit_post/:id", async (req, res) => {
+app.put("/OWunWan_edit_post/:id", ensureAuthenticated, async (req, res) => {
   // 수정완료 버튼 누르면
   try {
     await db
@@ -161,44 +182,72 @@ app.put("/OWunWan_edit_post/:id", async (req, res) => {
   }
 });
 
-app.delete("/OWunWan_delete/:id", async (req, res) => {
+app.delete("/OWunWan_delete/:id", ensureAuthenticated, async (req, res) => {
   //삭제하기
-  await db.collection("OWunWan").deleteOne({ _id: new ObjectId(req.params.id) });
+
+  await db.collection("OWunWan").deleteOne({ _id: new ObjectId(req.params.id), user: req.user._id });
   res.redirect("/OWunWan");
 });
 
 //자세 봐주세요 게시판
 
-app.get("/PostureQnA", async (req, res) => {
+app.get("/PostureQnA/:page", ensureAuthenticated, async (req, res) => {
   //자세 봐주세요 게시글목록
-  let result = await db.collection("PostureQnA").find().toArray();
-  res.render("PostureQnA.ejs", { result: result });
+  let pageCount = await db.collection("PostureQnA").countDocuments();
+  let totalPage = Math.ceil(pageCount / 8);
+  let result = await db
+    .collection("PostureQnA")
+    .find()
+    .sort({ date: -1 })
+    .skip((req.params.page - 1) * 8)
+    .limit(8)
+    .toArray();
+
+  res.render("PostureQnA.ejs", { result: result, totalPage: totalPage, userId: req.user._id });
 });
 
-app.get("/PostureQnAWrite", async (req, res) => {
+app.get("/PostureQnA", (req, res) => {
+  res.redirect("/PostureQnA/1");
+});
+
+app.get("/PostureQnAWrite", ensureAuthenticated, async (req, res) => {
   //자세 봐주세요 게시물 작성
   res.render("PostureQnAWrite.ejs");
 });
 
-app.post("/PostureQnA_post", async (req, res) => {
-  //자세 봐주세요 게시물 등록하기
-  try {
-    if (req.body.title === "") {
-      res.send("제목을 입력해주세요");
-    } else {
-      //제목이 입력되었을때만 저장
-      await db.collection("PostureQnA").insertOne({ title: req.body.title, content: req.body.content });
-      res.redirect("/PostureQnA");
+app.post("/PostureQnA_post", ensureAuthenticated, async (req, res) => {
+  upload.array("img", 4)(req, res, async (err) => {
+    if (err) return res.send("이미지 업로드 중 에러가 발생했습니다.");
+
+    try {
+      let imgUrl = [];
+      for (let i = 0; i < req.files.length; i++) {
+        imgUrl.push(req.files[i].location);
+      }
+      if (req.body.title === "") {
+        res.send("제목을 입력해주세요");
+      } else {
+        //제목이 입력되었을때만 저장
+        await db.collection("PostureQnA").insertOne({
+          title: req.body.title,
+          content: req.body.content,
+          user: req.user._id,
+          username: req.user.username,
+          imgUrl: imgUrl,
+          date: new Date(),
+        });
+        res.redirect("/PostureQnA");
+      }
+    } catch (error) {
+      res.send("DB error!");
     }
-  } catch (error) {
-    res.send("DB error!");
-  }
+  });
 });
 
-app.get("/PostureQnA/detail/:id", async (req, res) => {
+app.get("/PostureQnA/detail/:id", ensureAuthenticated, async (req, res) => {
   // 자세 봐주세요 상세페이지
   try {
-    let result = await db.collection("OWunWan").findOne({ _id: new ObjectId(req.params.id) });
+    let result = await db.collection("PostureQnA").findOne({ _id: new ObjectId(req.params.id) });
     if (result == null) {
       res.status(400).send("존재하지 않는 URL 입니다.");
     } else {
@@ -210,13 +259,13 @@ app.get("/PostureQnA/detail/:id", async (req, res) => {
   }
 });
 
-app.get("/PostureQnA_edit/:id", async (req, res) => {
+app.get("/PostureQnA_edit/:id", ensureAuthenticated, async (req, res) => {
   //수정할 게시글 불러오기
   let result = await db.collection("PostureQnA").findOne({ _id: new ObjectId(req.params.id) });
   res.render("PostureQnA_edit.ejs", { result: result });
 });
 
-app.put("/PostureQnA_edit_post/:id", async (req, res) => {
+app.put("/PostureQnA_edit_post/:id", ensureAuthenticated, async (req, res) => {
   // 수정완료 버튼 누르면
   try {
     await db
@@ -230,7 +279,7 @@ app.put("/PostureQnA_edit_post/:id", async (req, res) => {
   }
 });
 
-app.delete("/PostureQnA_delete/:id", async (req, res) => {
+app.delete("/PostureQnA_delete/:id", ensureAuthenticated, async (req, res) => {
   //삭제하기
   await db.collection("PostureQnA").deleteOne({ _id: new ObjectId(req.params.id) });
   res.redirect("/PostureQnA");
@@ -289,27 +338,36 @@ app.post("/join", async (req, res) => {
   let PW1 = req.body.password;
   let PW2 = req.body.password2;
 
-  function isId(asValue) {
-    var regExp = /^[a-z0-9]{4,20}$/;
-    return regExp.test(asValue);
-  }
-  function isPw(asValue) {
-    let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[^\s]{6,20}$/;
-    return regExp.test(asValue);
-  }
-  let checkId = isId(ID);
-  let checkPw = isPw(PW1);
+  let result = await db.collection("user").findOne({ username: ID });
 
-  if (checkId && checkPw && PW1 === PW2) {
+  if (result) {
+    //중복 아이디 방지
+    return res.send('<script>alert("이미 존재하는 ID 입니다."); location.href="/join";</script>');
+  }
+
+  if (ID.length < 4 || PW1.length < 4) {
+    //최소 자릿수 설정
+    return res.send('<script>alert("아이디/패스워드를 4자 이상 설정해주세요."); location.href="/join";</script>');
+  }
+
+  if (PW1 === PW2) {
     let hash = await bcrypt.hash(req.body.password, 12);
     await db.collection("user").insertOne({
       username: req.body.username,
       password: hash,
     });
-    res.send('<script>alert("회원가입이 완료되었습니다."); location.href="/";</script>');
-  } else if (PW1 !== PW2) {
-    res.send('<script>alert("비밀번호가 일치하지 않습니다."); location.href="/join";</script>');
-  } else if (checkId || checkPw) {
-    res.send('<script>alert("아이디/비밀번호 조건을 확인하세요."); location.href="/join";</script>');
+    return res.send('<script>alert("회원가입이 완료되었습니다."); location.href="/";</script>');
+  } else {
+    return res.send('<script>alert("비밀번호가 일치하지 않습니다."); location.href="/join";</script>');
   }
 });
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.send('<script>alert("로그인이 필요합니다. 로그인 페이지로 이동합니다."); location.href="/login";</script>');
+}
+
+// res.send('<script>alert("회원가입이 완료되었습니다."); location.href="/";</script>');
+// res.send('<script>alert("아이디/비밀번호 조건을 확인하세요."); location.href="/join";</script>');

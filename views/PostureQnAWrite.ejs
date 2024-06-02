@@ -10,9 +10,14 @@
     <%- include('nav.ejs') %>
 
     <article id="article">
-      <form id="owunwan_form" action="PostureQnA_post" method="post">
+      <form id="owunwan_form" action="PostureQnA_post" method="post" enctype="multipart/form-data">
         <input name="title" type="text" placeholder="제목을 적어주세요" class="font" required />
+        <br />
+        <input type="file" name="img" accept="image/*" multiple id="fileInput" />
+
         <textarea name="content" class="font" placeholder="궁금했던것들을 마음껏 질문해 보세요!" required></textarea>
+        <br />
+        사진 최대 4장 첨부 가능
         <br />
         <button type="button" class="font" id="PostureQnA_posting">🙋🏻‍♂질문하기🙋🏻‍♀</button>
       </form>

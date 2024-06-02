@@ -8,18 +8,19 @@
   </head>
   <body>
     <%- include('nav.ejs') %>
-
-    <article id="owunwan-article">
-      <div class="list-box">
-        <div class="list">
-          <h4><%= result.title %></h4>
-          <% for( let i = 0; i < imgData.length; i++ ) { %>
-          <p><img width="20%" href="<%= imgData[i].location %>" /></p>
-          <% } %>
-
-          <p><%= result.content %></p>
-        </div>
-      </div>
+    <article id="owunwan-detail-article">
+      작성자: <%= result.username %>
+      <br />
+      작성일: <% const dbDate = new Date(result.date); const localDate = new Date(dbDate.getTime() ); const
+      formattedDate = localDate.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'numeric',
+      day: 'numeric', hour: 'numeric', minute: 'numeric', }); %> <%= formattedDate %>
+      <br /><br />
+      <div style="font-size: 2vw">제목: <%= result.title %></div>
+      <hr />
+      <% if (result.imgUrl) { %> <% for( let i = 0; i < result.imgUrl.length; i++ ) { %>
+      <img width="25%" src="<%= result.imgUrl[i] %>" />
+      <% } %> <% } %>
+      <p style="font-size: 1.5vw"><%= result.content %></p>
     </article>
   </body>
 </html>

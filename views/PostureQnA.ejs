@@ -21,15 +21,28 @@
             <a href="/PostureQnA/detail/<%= result[i]._id %>">
               <p style="font-size: 1.1vw">📌 <%= result[i].title %></p>
               <br />
+
+              <% if (result[i].imgUrl.length == 0) { %>
               <p style="font-size: 0.9vw"><%= result[i].content %></p>
+
+              <% } else { %>
+              <img style="border-radius: 8px" width="100%" src="<%= result[i].imgUrl[0] %>" />
+              <% } %>
             </a>
           </div>
           <div class="list_btn">
-            <a id="edit_btn" href="/PostureQnA_edit/<%= result[i]._id %>"> ✏️ 수정하기</a>&nbsp;&nbsp;
+            <% console.log(result[i].user, userId) %> <% if (result[i].user.equals(userId)) { %>
+            <a id="edit_btn" href="/OWunWan_edit/<%= result[i]._id %>"> ✏️ 수정하기</a>&nbsp;&nbsp;
             <span id="del_btn" class="delete_btn" data-id="<%= result[i]._id %>">🗑️ 삭제하기</span>
+            <% } %>
           </div>
         </div>
 
+        <% } %>
+      </div>
+      <div id="footer">
+        <% for( let i = 1; i <= totalPage; i++ ) { %>
+        <a class="pagination" href="/PostureQnA/<%= i %>"><%= i %></a>
         <% } %>
       </div>
     </article>
