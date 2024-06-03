@@ -71,7 +71,6 @@ app.get("/", async (req, res) => {
     userId = req.user._id;
     result = await db.collection("user").findOne({ _id: new ObjectId(userId) });
   }
-  console.log(result);
   res.render("index.ejs", { result1: result1, result2, result2, userId: userId, result, result });
 });
 
@@ -151,10 +150,11 @@ app.get("/OWunWan/detail/:id", ensureAuthenticated, async (req, res) => {
 
   try {
     let result = await db.collection("OWunWan").findOne({ _id: new ObjectId(req.params.id) });
+    let comment = await db.collection("comment").find({ parentId: req.params.id }).toArray();
     if (result == null) {
       res.status(400).send("존재하지 않는 URL 입니다.");
     } else {
-      res.render("OWunWanDetail.ejs", { result: result });
+      res.render("OWunWanDetail.ejs", { result: result, comment: comment });
     }
   } catch (error) {
     console.log(error);
@@ -339,7 +339,6 @@ app.post("/join", async (req, res) => {
   let PW2 = req.body.password2;
 
   let result = await db.collection("user").findOne({ username: ID });
-
   if (result) {
     //중복 아이디 방지
     return res.send('<script>alert("이미 존재하는 ID 입니다."); location.href="/join";</script>');
@@ -369,5 +368,15 @@ function ensureAuthenticated(req, res, next) {
   res.send('<script>alert("로그인이 필요합니다. 로그인 페이지로 이동합니다."); location.href="/login";</script>');
 }
 
+app.post("/comment", ensureAuthenticated, async (req, res) => {
+  let comment = req.body.comment;
+  let parentId = req.body.parentId;
+  let userId = req.user._id;
+  let username = req.user.username;
+  await db
+    .collection("comment")
+    .insertOne({ comment: comment, parentId: parentId, userId: userId, username: username });
+  res.redirect("back");
+});
 // res.send('<script>alert("회원가입이 완료되었습니다."); location.href="/";</script>');
 // res.send('<script>alert("아이디/비밀번호 조건을 확인하세요."); location.href="/join";</script>');

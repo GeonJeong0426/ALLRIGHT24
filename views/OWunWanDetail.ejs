@@ -21,6 +21,25 @@
       <img width="25%" src="<%= result.imgUrl[i] %>" />
       <% } %> <% } %>
       <p style="font-size: 1.5vw"><%= result.content %></p>
+      <div class="detail-bg">
+        <h4><%= result.title %></h4>
+        <p><%= result.content %></p>
+        <hr style="margin-top: 60px" />
+        <div>
+          <p><strong>작성자</strong> 댓글내용</p>
+        </div>
+        <form action="/comment" method="POST">
+          <input name="comment" />
+          <input name="parentId" value="<%= result._id %>" style="display: none" />
+          <button type="submit">댓글작성</button>
+        </form>
+        <div>
+          <% for( let i = 0; i < comment.length; i++ ) { %>
+          <p>[ <%= comment[i].username %>] <%= comment[i].comment %></p>
+          <% } %>
+        </div>
+      </div>
     </article>
+    <script></script>
   </body>
 </html>
