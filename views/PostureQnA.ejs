@@ -17,7 +17,7 @@
         <% for( let i = 0; i < result.length; i++ ) { %>
 
         <div class="list">
-          <div class="list_content">
+          <div class="list_content" style="text-align: center">
             <a href="/PostureQnA/detail/<%= result[i]._id %>">
               <p style="font-size: 1.1vw">📌 <%= result[i].title %></p>
               <br />
@@ -26,7 +26,7 @@
               <p style="font-size: 0.9vw"><%= result[i].content %></p>
 
               <% } else { %>
-              <img style="border-radius: 8px" width="100%" src="<%= result[i].imgUrl[0] %>" />
+              <img style="border-radius: 8px" width="90%" height="60%" src="<%= result[i].imgUrl[0] %>" />
               <% } %>
             </a>
           </div>

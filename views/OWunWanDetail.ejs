@@ -9,7 +9,7 @@
   <body>
     <%- include('nav.ejs') %>
     <article id="owunwan-detail-article">
-      작성자: <%= result.username %>
+      작성자: <%= result.nickname %> (<%= result.username %>)
       <br />
       작성일: <% const dbDate = new Date(result.date); const localDate = new Date(dbDate.getTime() ); const
       formattedDate = localDate.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'numeric',
@@ -22,11 +22,9 @@
       <% } %> <% } %>
       <p style="font-size: 1.5vw"><%= result.content %></p>
       <div class="detail-bg">
-        <h4><%= result.title %></h4>
-        <p><%= result.content %></p>
         <hr style="margin-top: 60px" />
         <div>
-          <p><strong>작성자</strong> 댓글내용</p>
+          <p><strong>[ 작성자 ]:</strong> 댓글내용</p>
         </div>
         <form action="/comment" method="POST">
           <input name="comment" />
@@ -35,11 +33,24 @@
         </form>
         <div>
           <% for( let i = 0; i < comment.length; i++ ) { %>
-          <p>[ <%= comment[i].username %>] <%= comment[i].comment %></p>
+          <br />
+          <p>
+            <a title="삭제" href="#" onclick="confirmDelete('<%= comment[i]._id %>')">🗑️</a> [ <%= comment[i].nickname
+            %> ]: <%= comment[i].comment %>
+          </p>
           <% } %>
+          <br /><br /><br />
         </div>
       </div>
     </article>
-    <script></script>
+    <script>
+      function confirmDelete(docId) {
+        var isConfirmed = confirm("댓글을 삭제하시겠습니까?");
+
+        if (isConfirmed) {
+          window.location.href = "/deleteComment?docid=" + docId;
+        }
+      }
+    </script>
   </body>
 </html>

@@ -22,15 +22,39 @@
       <% if (userId === false) { %>
       <a href="/login">로그인</a>
       <a href="/join">회원가입</a>
-      <% } else { %> <%= result.username %> 님 반갑습니다. <% } %>
+      <% } else { %> ( <%= result.nickname %> ) 님 반갑습니다. <% } %>
     </div>
     <article id="article">
-      <% for( let i = 0; i < result1.length; i++ ) { %>
-      <a href="/OWunWan/detail/<%= result1[i]._id %>"><%= result1[i].title %></a>
-      <% } %> <% for( let i = 0; i < result2.length; i++ ) { %>
-      <a><%= result2[i].title %></a>
+      <div id="index-div">
+        <div id="index-left" class="index-div">
+          <br />
+          <br />
+          <자세 궁금해요 최신 게시글>
+          <br />
+          <br />
+          <br />
 
-      <% } %>
+          <% for( let i = 0; i < result2.length; i++ ) { %>
+          <br />
+
+          <p><a href="/PostureQnA/detail/<%= result2[i]._id %>"><%= result2[i].title %></a></p>
+          <% } %>
+        </div>
+        <div id="index-right" class="index-div">
+          <br />
+          <br />
+          <오운완 최신 게시글>
+          <br />
+          <br />
+          <br />
+
+          <% for( let i = 0; i < result1.length; i++ ) { %>
+          <br />
+          <p><a href="/OWunWan/detail/<%= result1[i]._id %>"><%= result1[i].title %></a></p>
+
+          <% } %>
+        </div>
+      </div>
     </article>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>

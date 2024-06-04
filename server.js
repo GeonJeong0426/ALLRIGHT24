@@ -63,15 +63,17 @@ new MongoClient(url)
   });
 
 app.get("/", async (req, res) => {
-  let result1 = await db.collection("OWunWan").find().sort({ date: -1 }).limit(5).toArray();
-  let result2 = await db.collection("PostureQnA").find().sort({ date: -1 }).limit(5).toArray();
+  let result1 = await db.collection("OWunWan").find().sort({ date: -1 }).limit(10).toArray();
+  let result2 = await db.collection("PostureQnA").find().sort({ date: -1 }).limit(10).toArray();
   let userId = false;
   let result = false;
+  let nickname = false;
   if (req.user) {
     userId = req.user._id;
+    nickname = req.user.nickname;
     result = await db.collection("user").findOne({ _id: new ObjectId(userId) });
   }
-  res.render("index.ejs", { result1: result1, result2, result2, userId: userId, result, result });
+  res.render("index.ejs", { result1: result1, result2, result2, userId: userId, result, result, nickname: nickname });
 });
 
 app.get("/Quiz", (req, res) => {
@@ -134,6 +136,7 @@ app.post("/OWunWan_post", ensureAuthenticated, async (req, res) => {
           content: req.body.content,
           user: req.user._id,
           username: req.user.username,
+          nickname: req.user.nickname,
           imgUrl: imgUrl,
           date: new Date(),
         });
@@ -233,6 +236,7 @@ app.post("/PostureQnA_post", ensureAuthenticated, async (req, res) => {
           content: req.body.content,
           user: req.user._id,
           username: req.user.username,
+          nickname: req.user.nickname,
           imgUrl: imgUrl,
           date: new Date(),
         });
@@ -248,10 +252,12 @@ app.get("/PostureQnA/detail/:id", ensureAuthenticated, async (req, res) => {
   // 자세 봐주세요 상세페이지
   try {
     let result = await db.collection("PostureQnA").findOne({ _id: new ObjectId(req.params.id) });
+    let comment = await db.collection("comment").find({ parentId: req.params.id }).toArray();
+
     if (result == null) {
       res.status(400).send("존재하지 않는 URL 입니다.");
     } else {
-      res.render("PostureQnADetail.ejs", { result: result });
+      res.render("PostureQnADetail.ejs", { result: result, comment: comment });
     }
   } catch (error) {
     console.log(error);
@@ -337,11 +343,18 @@ app.post("/join", async (req, res) => {
   let ID = req.body.username;
   let PW1 = req.body.password;
   let PW2 = req.body.password2;
+  let nickname = req.body.nickname;
 
   let result = await db.collection("user").findOne({ username: ID });
+  let result2 = await db.collection("user").findOne({ nickname: nickname });
+
   if (result) {
     //중복 아이디 방지
     return res.send('<script>alert("이미 존재하는 ID 입니다."); location.href="/join";</script>');
+  }
+  if (result2) {
+    //중복 아이디 방지
+    return res.send('<script>alert("이미 존재하는 닉네임 입니다."); location.href="/join";</script>');
   }
 
   if (ID.length < 4 || PW1.length < 4) {
@@ -353,6 +366,7 @@ app.post("/join", async (req, res) => {
     let hash = await bcrypt.hash(req.body.password, 12);
     await db.collection("user").insertOne({
       username: req.body.username,
+      nickname: nickname,
       password: hash,
     });
     return res.send('<script>alert("회원가입이 완료되었습니다."); location.href="/";</script>');
@@ -373,10 +387,25 @@ app.post("/comment", ensureAuthenticated, async (req, res) => {
   let parentId = req.body.parentId;
   let userId = req.user._id;
   let username = req.user.username;
+  let nickname = req.user.nickname;
+
   await db
     .collection("comment")
-    .insertOne({ comment: comment, parentId: parentId, userId: userId, username: username });
+    .insertOne({ comment: comment, parentId: parentId, userId: userId, username: username, nickname: nickname });
   res.redirect("back");
 });
-// res.send('<script>alert("회원가입이 완료되었습니다."); location.href="/";</script>');
-// res.send('<script>alert("아이디/비밀번호 조건을 확인하세요."); location.href="/join";</script>');
+
+app.get("/deleteComment", ensureAuthenticated, async (req, res) => {
+  let IdVer = await db
+    .collection("comment")
+    .findOne({ _id: new ObjectId(req.query.docid), userId: new ObjectId(req.user._id) });
+
+  if (IdVer) {
+    await db
+      .collection("comment")
+      .deleteOne({ _id: new ObjectId(req.query.docid), userId: new ObjectId(req.user._id) });
+    res.redirect("back");
+  } else {
+    res.send('<script>alert("본인의 글만 삭제할 수 있습니다."); history.back();</script>');
+  }
+});
