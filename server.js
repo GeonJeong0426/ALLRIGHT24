@@ -121,7 +121,7 @@ app.get("/OWunWanWrite", ensureAuthenticated, async (req, res) => {
 app.post("/OWunWan_post", ensureAuthenticated, async (req, res) => {
   upload.array("img", 4)(req, res, async (err) => {
     if (err) return res.send("이미지 업로드 중 에러가 발생했습니다.");
-
+    console.log(req);
     try {
       let imgUrl = [];
       for (let i = 0; i < req.files.length; i++) {

@@ -31,8 +31,8 @@
             </a>
           </div>
           <div class="list_btn">
-            <% console.log(result[i].user, userId) %> <% if (result[i].user.equals(userId)) { %>
-            <a id="edit_btn" href="/OWunWan_edit/<%= result[i]._id %>"> ✏️ 수정하기</a>&nbsp;&nbsp;
+            <% if (result[i].user.equals(userId)) { %>
+            <a id="edit_btn" href="/PostureQnA_edit/<%= result[i]._id %>"> ✏️ 수정하기</a>&nbsp;&nbsp;
             <span id="del_btn" class="delete_btn" data-id="<%= result[i]._id %>">🗑️ 삭제하기</span>
             <% } %>
           </div>

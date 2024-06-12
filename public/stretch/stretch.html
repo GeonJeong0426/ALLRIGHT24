@@ -4,8 +4,293 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALLRIGHT24</title>
-    <link rel="stylesheet" href="stretch_style.css" />
-    <script src="stretchDscr.js" defer type="text/javascript"></script>
+    <style>
+      html,
+      body,
+      div,
+      span,
+      applet,
+      object,
+      iframe,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      blockquote,
+      pre,
+      a,
+      abbr,
+      acronym,
+      address,
+      big,
+      cite,
+      code,
+      del,
+      dfn,
+      em,
+      img,
+      ins,
+      kbd,
+      q,
+      s,
+      samp,
+      small,
+      strike,
+      strong,
+      sub,
+      sup,
+      tt,
+      var,
+      b,
+      u,
+      i,
+      center,
+      dl,
+      dt,
+      dd,
+      ol,
+      ul,
+      li,
+      fieldset,
+      form,
+      label,
+      legend,
+      table,
+      caption,
+      tbody,
+      tfoot,
+      thead,
+      tr,
+      th,
+      td,
+      article,
+      aside,
+      canvas,
+      details,
+      embed,
+      figure,
+      figcaption,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      output,
+      ruby,
+      section,
+      summary,
+      time,
+      mark,
+      audio,
+      video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol,
+      ul {
+        list-style: none;
+      }
+      blockquote,
+      q {
+        quotes: none;
+      }
+      blockquote:before,
+      blockquote:after,
+      q:before,
+      q:after {
+        content: "";
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      /* RESET CSS */
+
+      @font-face {
+        font-family: "KBO-Dia-Gothic_bold";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/KBO-Dia-Gothic_bold.woff")
+          format("woff");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Ownglyph_meetme-Rg";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2")
+          format("woff2");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      html {
+        height: 100%;
+      }
+
+      body {
+        /* background-color: rgb(36, 181, 124); */
+        background-color: rgb(91, 99, 212);
+        color: white;
+        font-family: "KBO-Dia-Gothic_bold", sans-serif;
+        text-align: center;
+        height: 90%;
+      }
+
+      a {
+        text-decoration: none; /* 밑줄 제거 */
+        color: inherit; /* 링크 색깔을 부모 요소의 색상으로 상속 */
+      }
+
+      header {
+        font-size: 4.5vw;
+        margin-top: 5vh;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      header:hover {
+        color: white;
+        cursor: pointer;
+        /* transform: scale(1.1); */
+      }
+
+      nav {
+        display: flex;
+        margin-top: 5vh;
+        justify-content: center; /* 수평 가운데 정렬 */
+        font-size: 1.7vw;
+        text-align: left;
+      }
+
+      nav ul {
+        display: flex;
+      }
+
+      nav ul li:hover {
+        color: white;
+        cursor: pointer;
+        transform: scale(1.3);
+      }
+
+      nav ul li {
+        transition: transform 0.2s ease-in-out;
+        margin-right: 5vw; /* nav 좌우 간격 조절 */
+      }
+
+      article {
+        margin: 5vh auto;
+        width: 80%;
+        height: 70%;
+        border: 5px solid rgb(255, 255, 255);
+        border-radius: 30px;
+      }
+
+      /*위에 수정하지 마시고 여기부터 추가하세요 */
+      .stretch {
+        padding: 0 10px;
+        margin-bottom: 10px;
+      }
+
+      .stretch > li:first-child {
+        margin: 10px 0;
+      }
+
+      .detail {
+        border: 3px solid rgb(255, 255, 255);
+        border-radius: 10px;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .detail li {
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .detail li:hover {
+        transform: scale(1.1);
+        border-bottom: 2px solid #fff;
+      }
+
+      .detail li a.active {
+        border-bottom: 2px solid #fff;
+      }
+
+      .showbox {
+        height: calc(100% - 150px);
+        margin: auto;
+        width: 95%;
+        /* border: solid 2px red; */
+        overflow: hidden;
+      }
+
+      .stretch_img {
+        height: 80%;
+        background: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      #s_img img {
+        /* max-width: 300px;
+  max-height: 250px; */
+        height: 15vmax;
+        width: 23vmax;
+      }
+
+      .arrow {
+        border: 0;
+        background-color: transparent;
+        border-radius: 20px;
+        box-shadow: 3px 3px 3px #eee;
+        transition-duration: 0.3s;
+      }
+
+      .arrow:hover {
+        opacity: 0.6;
+      }
+
+      .arrow:active {
+        margin: 3px 0 0 3px;
+        box-shadow: none;
+      }
+
+      .arrow img {
+        width: 10vmax;
+      }
+
+      .text {
+        margin-top: 15px;
+        text-align: center;
+        line-height: 120%;
+        font-size: 1.8vw;
+      }
+    </style>
   </head>
   <body>
     <header class="home"><a href="/">ALLRIGHT24</a></header>
@@ -43,12 +328,155 @@
 
       <div class="showbox">
         <div class="stretch_img">
-          <button class="arrow" id="prev"><img src="img/화살표1.png" alt="&lt;" /></button>
+          <button class="arrow" id="prev"><img src="/stretch/img/left.png" alt="&lt;" /></button>
           <p id="s_img"><img src="" alt="" /></p>
-          <button class="arrow" id="next"><img src="img/화살표2.png" alt="&gt;" /></button>
+          <button class="arrow" id="next"><img src="/stretch/img/right.png" alt="&gt;" /></button>
         </div>
         <p class="text"></p>
       </div>
     </article>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        //스트레칭 이미지&설명
+        const stretches = [
+          {
+            id: "neck",
+            image: "/stretch/img/a.png",
+            description: "목에 힘을 빼고 좌, 우, 앞, 뒤 순서로 머리를 기울입니다.",
+          },
+          {
+            id: "shoulder",
+            image: "/stretch/img/b.png",
+            description:
+              "a. 오른팔을 어깨 높이로 들고 왼팔로 걸어 몸쪽으로 당깁니다.<br>b. 오른팔을 들어 머리 뒤로 내리고 왼손으로 오른쪽 팔꿈치를 잡아서 밑으로 누릅니다.",
+          },
+          {
+            id: "shoulder",
+            image: "/stretch/img/c.png",
+            description: "손바닥이 위를 향하도록 깍지를 끼고 몸을 좌, 우로 움직입니다.",
+          },
+          {
+            id: "chest",
+            image: "/stretch/img/d.png",
+            description: "무릎을 꿇고 앉아 양손을 앞으로 뻗고 엎드려, 어깨와 가슴을 아래로 지긋이 누릅니다.",
+          },
+          {
+            id: "waist",
+            image: "/stretch/img/e.png",
+            description: "팔꿈치를 바닥에 대고 엎드리고 상체를 천천히 들어 올립니다.",
+          },
+          {
+            id: "waist",
+            image: "/stretch/img/f.png",
+            description:
+              "a. 고개를 들고 허리를 아래로 누릅니다.<br>b. 고개를 숙이고 복부에 힘을 주면서 등과 허리를 위로 당깁니다.",
+          },
+          {
+            id: "thigh",
+            image: "/stretch/img/g.png",
+            description: "다리를 뒤로 접고 손으로 발을 잡아 엉덩이 쪽으로 당깁니다.",
+          },
+          {
+            id: "thigh",
+            image: "/stretch/img/h.png",
+            description: "뒷다리를 무릎을 굽혀 중심을 잡고 앞다리무릎은 편 후에 배꼽이 허벅지에 닿도록 내려갑니다.",
+          },
+          {
+            id: "thigh",
+            image: "/stretch/img/i.png",
+            description:
+              "양 다리를 좌우로 벌리고 손으로 무릎을 잡습니다.<br> 무릎이 90도가 될 때까지 엉덩이를 바닥 쪽으로 내리고 몸을 옆으로 틀어줍니다.",
+          },
+          {
+            id: "hip",
+            image: "/stretch/img/j.png",
+            description:
+              "한쪽 다리 발목을 반대 다리 허벅지에 올려 숫자4 모양을 만들어 줍니다.<br> 세워놓은 다리 허벅지를 손으로 감싸 가슴으로 당겨줍니다.",
+          },
+          {
+            id: "hip",
+            image: "/stretch/img/k.png",
+            description: "바닥에 누워 한쪽 무릎을 접어 가슴쪽으로 당깁니다.",
+          },
+          {
+            id: "calf",
+            image: "/stretch/img/l.png",
+            description:
+              "양손으로 벽을 짚고 허리를 펴고 서서 왼쪽 종아리가 당기는 느낌이 들 때까지 오른쪽 무릎을 굽힙니다.",
+          },
+        ];
+
+        let currentIndex = 0;
+
+        //index태그 연결 변수
+        const detailLinks = document.querySelectorAll("a.stretch_detail"); //스트레칭 세부 부위
+        const partLinks = document.querySelectorAll("a.stretch_part"); //상하체
+        const stretchImg = document.querySelector("#s_img img");
+        const stretchDes = document.querySelector(".text");
+        const prevButton = document.getElementById("prev");
+        const nextButton = document.getElementById("next");
+
+        //스트레칭 사진, 설명 띄우기
+        function updateSInfo() {
+          const stretch = stretches[currentIndex];
+          stretchImg.src = stretch.image;
+          stretchImg.alt = stretch.description;
+          stretchDes.innerHTML = stretch.description;
+
+          detailLinks.forEach((link) => link.classList.remove("active"));
+          partLinks.forEach((link) => link.classList.remove("active"));
+          const currentDetailLink = document.querySelector(`a.stretch_detail[data-target="${stretch.id}"]`); //스트레칭 세부 부위 찾기
+          const currentPartLink = document.querySelector(`a.stretch_part[data-target="${stretch.id.split("-")[0]}"]`); //upper / lower 찾기
+          if (currentDetailLink) {
+            currentDetailLink.classList.add("active"); //밑줄 효과
+          }
+          if (currentPartLink) {
+            currentPartLink.classList.add("active");
+          }
+        }
+
+        // 화살표 클릭event
+        prevButton.addEventListener("click", () => {
+          if (currentIndex === 0) {
+            currentIndex = stretches.length - 1;
+          } else {
+            currentIndex--;
+          }
+          updateSInfo();
+        });
+
+        nextButton.addEventListener("click", () => {
+          if (currentIndex === stretches.length - 1) {
+            currentIndex = 0;
+          } else {
+            currentIndex++;
+          }
+          updateSInfo();
+        });
+
+        detailLinks.forEach((link) => {
+          link.addEventListener("click", (event) => {
+            event.preventDefault(); //기본 클릭 동작 방지
+            currentIndex = stretches.findIndex((stretch) => stretch.id === link.getAttribute("data-target"));
+            updateSInfo();
+          });
+        });
+
+        partLinks.forEach((link) => {
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const targetPart = link.getAttribute("data-target");
+            const targetIndex = stretches.findIndex((stretch) => stretch.id.startsWith(targetPart));
+            if (targetIndex !== -1) {
+              currentIndex = targetIndex;
+              updateSInfo();
+            }
+          });
+        });
+
+        // 초기 표시
+        updateSInfo();
+      });
+    </script>
   </body>
 </html>

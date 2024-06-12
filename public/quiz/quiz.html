@@ -4,7 +4,364 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALLRIGHT24</title>
-    <link rel="stylesheet" href="quiz.css" />
+    <style>
+      html,
+      body,
+      div,
+      span,
+      applet,
+      object,
+      iframe,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      blockquote,
+      pre,
+      a,
+      abbr,
+      acronym,
+      address,
+      big,
+      cite,
+      code,
+      del,
+      dfn,
+      em,
+      img,
+      ins,
+      kbd,
+      q,
+      s,
+      samp,
+      small,
+      strike,
+      strong,
+      sub,
+      sup,
+      tt,
+      var,
+      b,
+      u,
+      i,
+      center,
+      dl,
+      dt,
+      dd,
+      ol,
+      ul,
+      li,
+      fieldset,
+      form,
+      label,
+      legend,
+      table,
+      caption,
+      tbody,
+      tfoot,
+      thead,
+      tr,
+      th,
+      td,
+      article,
+      aside,
+      canvas,
+      details,
+      embed,
+      figure,
+      figcaption,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      output,
+      ruby,
+      section,
+      summary,
+      time,
+      mark,
+      audio,
+      video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol,
+      ul {
+        list-style: none;
+      }
+      blockquote,
+      q {
+        quotes: none;
+      }
+      blockquote:before,
+      blockquote:after,
+      q:before,
+      q:after {
+        content: "";
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      /* RESET CSS */
+
+      /* #alert{
+    display: none;
+} */
+
+      @font-face {
+        font-family: "KBO-Dia-Gothic_bold";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/KBO-Dia-Gothic_bold.woff")
+          format("woff");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      html {
+        height: 100%;
+      }
+
+      body {
+        background-color: rgb(91, 99, 212);
+        color: white;
+        font-family: "KBO-Dia-Gothic_bold", sans-serif;
+        text-align: center;
+        height: 90%;
+      }
+
+      a {
+        text-decoration: none; /* 밑줄 제거 */
+        color: inherit; /* 링크 색깔을 부모 요소의 색상으로 상속 */
+      }
+
+      header {
+        font-size: 4vw;
+        margin-top: 5vh;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      header:hover {
+        color: white;
+        cursor: pointer;
+        /* transform: scale(1.1); */
+      }
+
+      nav {
+        display: flex;
+        margin-top: 5vh;
+        justify-content: center; /* 수평 가운데 정렬 */
+        font-size: 1.7vw;
+        text-align: left;
+      }
+      nav ul {
+        display: flex;
+      }
+      nav ul li:hover {
+        color: white;
+        cursor: pointer;
+        transform: scale(1.3);
+      }
+      nav ul li {
+        transition: transform 0.2s ease-in-out;
+
+        margin-right: 5vw; /* nav 좌우 간격 조절 */
+      }
+      article {
+        margin: 5vh auto;
+        width: 80%;
+        height: 70%;
+        border: 5px solid rgb(255, 255, 255);
+        border-radius: 30px;
+        color: black;
+        padding: 1vh;
+      }
+      #owunwan-article {
+        margin: 5vh auto;
+        width: 85%;
+        height: 75%;
+        border: 5px solid rgb(255, 255, 255);
+        border-radius: 30px;
+        background-color: white;
+      }
+
+      #start_btn {
+        font-family: "KBO-Dia-Gothic_bold", sans-serif;
+        font-size: 5vw;
+        border-radius: 30px;
+        width: 30%;
+        margin: 30vh 5vw;
+        padding: 1vw;
+        transition: transform 0.15s ease-in-out;
+      }
+      #start_btn:hover {
+        transform: scale(1.2);
+        cursor: pointer;
+      }
+
+      #reset_btn {
+        font-family: "KBO-Dia-Gothic_bold", sans-serif;
+        font-size: 5vw;
+        border-radius: 30px;
+        width: 30%;
+        /* margin: 30vh 5vw; */
+        padding: 1vw;
+        transition: transform 0.15s ease-in-out;
+      }
+      #reset_btn:hover {
+        transform: scale(1.2);
+        cursor: pointer;
+      }
+
+      .hide {
+        display: none;
+      }
+
+      #test_question {
+        margin-top: 3vh;
+        margin-bottom: 15vh;
+        font-size: 3vw;
+      }
+
+      #test_status {
+        text-align: right;
+        margin-top: 5vh;
+        margin-right: 3vw;
+        font-size: 3vw;
+      }
+
+      .oxButton {
+        width: 10vw;
+        height: 15vh;
+        font-size: 5vw;
+        margin: 5vh 5vw;
+        border-radius: 30px;
+        transition: transform 0.15s ease-in-out;
+        font-family: "KBO-Dia-Gothic_bold", sans-serif;
+        color: blue;
+      }
+
+      .oxButton:hover {
+        transform: scale(1.2);
+        cursor: pointer;
+      }
+
+      .font {
+        font-family: "KBO-Dia-Gothic_bold", sans-serif;
+      }
+
+      #owunwan_form input {
+        width: 60%;
+        margin-top: 3vh;
+        border-radius: 5px;
+        font-size: 2vw;
+      }
+
+      #owunwan_form textarea {
+        width: 60%;
+        height: 30vh;
+        margin-top: 3vh;
+        border-radius: 5px;
+        font-size: 2vw;
+      }
+
+      #owunwan_form button {
+        padding: 10px;
+        border: none;
+        background: rgb(0, 162, 255);
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 3vh;
+        border: 1px solid white;
+        transition: transform 0.2s ease-in-out;
+        font-size: 2vw;
+      }
+
+      #owunwan_form button:hover {
+        transform: scale(1.2);
+      }
+
+      .list-box {
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+      }
+
+      .list {
+        width: 13vw;
+        height: 20vh;
+        text-align: left;
+        margin: 2vw;
+        padding: 2vh;
+        border: 1px solid black;
+        background-color: wheat;
+        border-radius: 10px;
+        flex-direction: column;
+        display: flex;
+        transition: transform 0.15s ease-in-out;
+      }
+
+      .list_content {
+        flex: 9;
+      }
+
+      .list:hover {
+        cursor: pointer;
+        transform: scale(1.15);
+      }
+
+      .list_btn {
+        flex: 1;
+        text-align: center;
+        flex-direction: column;
+      }
+
+      .delete_btn:hover {
+        cursor: pointer;
+        border-radius: 10px;
+        background-color: rgb(255, 71, 71);
+      }
+
+      #owunwan_write_btn {
+        font-size: 1.5vw;
+        border-radius: 10px;
+        transition: transform 0.15s ease-in-out;
+      }
+      #owunwan_write_btn:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+      }
+
+      #edit_btn:hover {
+        border-radius: 10px;
+        background-color: rgb(130, 190, 229);
+      }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
@@ -27,6 +384,178 @@
       <div id="test_status"></div>
     </article>
 
-    <script src="./quiz.js"></script>
+    <script>
+      const article = document.getElementById("article"); //본문영역
+      const test_area = document.getElementById("test_area"); //문제가 나오는 영역
+      const start_btn = document.getElementById("start_btn"); //test 시작버튼
+      const reset_btn = document.getElementById("reset_btn"); //처음으로 버튼
+      const test_status = document.getElementById("test_status"); //진행도 영역 ex) 1/10
+
+      let test_score = {
+        right: 0,
+        wrong: 0,
+      };
+
+      let test_number = 0;
+      const test_question = [
+        {
+          question: "3대 영양소는 탄수화물, 단백질, 지방이다.",
+          answer: true,
+          Alert() {
+            Swal.fire("3대 영양소는 \n탄수화물, 단백질, 지방입니다.");
+          },
+        },
+        {
+          question: "나트륨은 좋지 않기에 아예 섭취하지 않는 것이 좋다.",
+          answer: false,
+          Alert() {
+            Swal.fire(
+              "나트륨을 아예 섭취하지 않으면 \n우리 몸은 에너지원인 탄수화물 속 \n글리코겐을 운반하는 것에 어려움을 느껴 땀도 잘 나지않고 혈류가 \n충분히 공급되지 않습니다."
+            );
+          },
+        },
+        {
+          question: "근육 생성을 위해 단백질은 최대한 많이 먹어야 좋다",
+          answer: false,
+          Alert() {
+            Swal.fire("단백질을 과도하게 섭취하면 \n지방으로 변하므로 목적에 따라 \n적정량 섭취하는 것이 중요합니다.");
+          },
+        },
+        {
+          question: "가슴근육은 팔의 이두 근육에 붙어있다.",
+          answer: true,
+          Alert() {
+            Swal.fire("가슴근육인 대흉근은 \n우리 팔 이두근에 붙어있습니다.");
+          },
+        },
+        {
+          question: "몸이 좋아지기 위해서는 운동과 휴식을 잘 하면 된다.",
+          answer: false,
+          Alert() {
+            Swal.fire("운동, 영양, 휴식 \n이 세가지 모두를 잘 해야 \n몸이 빠르게 좋아집니다.");
+          },
+        },
+        {
+          question: "단백질파우더(프로틴)을 섭취하면 통풍이 온다",
+          answer: false,
+          Alert() {
+            Swal.fire(
+              "빠르게 소화되는 특징때문에 \n많이 섭취했을 때는 \n통풍이 올 확률이 높지만, \n권장량만 섭취한다면 \n문제는 없습니다."
+            );
+          },
+        },
+        {
+          question: "건강한 식단은 별로 중요하지 않고 운동만 잘하면 근성장은 잘 일어난다.",
+          answer: false,
+          Alert() {
+            Swal.fire(
+              "건강한 식단의 이유는 운동으로 인해 손상된 근육의 빠른 회복을 도와 \n근성장이 잘 일어나도록 \n하기 위함입니다."
+            );
+          },
+        },
+        {
+          question: "데드리프트는 등운동이다.",
+          answer: false,
+          Alert() {
+            Swal.fire(
+              "데드리프트는 등 뿐이 아닌 \n후면에 위치한 근육들을 \n강화시키기에 좋은 운동이며, \n굳이 따지자면 하체 운동입니다."
+            );
+          },
+        },
+        {
+          question: "3대 운동은 힘을 기르는 것 뿐이 아닌, 부상을 방지해주는 역할도 한다.",
+          answer: true,
+          Alert() {
+            Swal.fire(
+              "3대 운동은 몸의 협응근의 발달을 \n도와 부상 발생의 위험도를 낮춰주고 더욱 기능적인 움직임을 만드는 데에 도움을 줍니다."
+            );
+          },
+        },
+        {
+          question: "운동을 시작하는 것은 너무 어렵다",
+          answer: false,
+          Alert() {
+            Swal.fire("열정만 있으면 무엇이든 \n다 가능합니다. \n지금이라도 늦지 않았습니다. \nAllright!");
+          },
+        },
+      ];
+
+      function answer(user_answer) {
+        if (user_answer === test_question[test_number].answer) {
+          test_score.right++;
+        } else {
+          test_score.wrong++;
+        }
+        // 사용자의 답변을 확인한 후 SweetAlert 호출
+        test_question[test_number].Alert();
+      }
+
+      // 점수 초기화 함수
+      function resetTestScore() {
+        test_score.right = 0;
+        test_score.wrong = 0;
+      }
+
+      function showTest(test_number) {
+        //문제와 OX버튼 출력 함수
+        if (test_number < 10) {
+          test_area.innerHTML = `
+    <div id = "test_question">${test_number + 1}. ${test_question[test_number].question}</div>
+    <button id = "oButton" class = "oxButton">O</button>
+    <button id = "xButton" class = "oxButton">X</button>
+    `;
+          test_status.innerText = `${test_number + 1}/10`;
+          console.log(test_number);
+        }
+
+        if (test_number > 9) {
+          console.log(test_number);
+
+          test_area.innerHTML = `
+    <div id = "test_question">
+      
+      <p>
+        맞은개수: ${test_score.right}<br>
+        틀린개수: ${test_score.wrong}
+      </p>
+      <br>
+      당신의 점수는? ${test_score.right * 10}점!
+    </div>
+    `; //문제나오는곳 초기화
+          test_status.innerText = ``;
+          reset_btn.classList.remove("hide");
+        }
+      }
+
+      start_btn.addEventListener("click", () => {
+        //시작하기 버튼 누르면 문제 보여주는 함수
+        start_btn.classList.add("hide");
+        showTest(test_number);
+      });
+
+      document.addEventListener("click", (event) => {
+        //OX버튼을 누르면 다음 문제로 넘어감
+        if (event.target.id === "oButton" || event.target.id === "xButton") {
+          answer(event.target.id === "oButton");
+          // 사용자의 답과 함께 answer 함수 호출
+
+          test_number++;
+          showTest(test_number);
+          if (event.target.id === "oButton") {
+            console.log("oclick");
+          } else {
+            console.log("xclick");
+          }
+        }
+      });
+
+      reset_btn.addEventListener("click", () => {
+        resetTestScore(); // 점수 초기화
+        reset_btn.classList.add("hide");
+        start_btn.classList.remove("hide");
+        test_area.innerText = ""; // 문제 영역 초기화
+        test_number = 0; // 문제 번호 초기화
+      });
+    </script>
   </body>
 </html>
